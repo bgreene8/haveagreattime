@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dad Joke Challenge</title>
+    <style>
+        #header-container {
+            background-color: #9ad8ff7b; /* Background color */
+            color: rgb(0, 0, 0); /* Text color */
+            text-align: center;
+            padding: 20px; /* Space around the title */
+            width: 100%; /* Makes it stretch across the screen */
+            box-sizing: border-box; /* Ensures padding doesn’t change width */
+            left: 0; /* Aligns to the left */
+            right: 0; /* Aligns to the right */
+            position:fixed; /* Keeps it at the top of the page */
+            top: 0; /* Aligns to the top */
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #9ed8fc7b;
+            overflow: hidden;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px auto;
+            border: none;
+            background-color: #fb9af4;
+            color: rgb(0, 0, 0);
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #ff52f6ce;
+        }
+        #joke {
+            font-size: 20px;
+            color: #333;
+            margin: 20px;
+        }
+        #feedback {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #punchline {
+            font-size: 26px;
+            font-weight: bold;
+            color: #000;
+            display: none;
+            margin-top: 15px;
+        }
+        #inputAnswer {
+            padding: 10px;
+            font-size: 16px;
+            margin: 20px auto;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #score {
+            font-size: 18px;
+            color: #007bff;
+        }
+        #confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .confetti {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            background-color: red;
+            opacity: 0.7;
+            transform: rotate(45deg);
+            animation: burst 1s ease-out forwards, fall 2s linear 1s forwards;
+        }
+        @keyframes burst {
+            from {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            to {
+                transform: translate(var(--burstX), var(--burstY));
+                opacity: 0.9;
+            }
+        }
+        @keyframes fall {
+            from {
+                opacity: 1;
+            }
+            to {
+                transform: translate(var(--burstX), calc(var(--burstY) + 100vh));
+                opacity: 0;
+            }
+        }
+        footer {
+            background-color: #9ad8ff7b;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+        }
+
+        footer a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-container">
+        <h1>Dad Joke Challenge</h1>
+    </div>
+    <br><br><br><br><br><br>
+    <p id="score">Score: 0</p>
+    <button onclick="generateJoke()">Get a Dad Joke</button>
+    <p id="joke"></p>
+    <input type="text" id="inputAnswer" placeholder="Guess the punchline!" style="display: none;">
+    <button id="submitButton" onclick="checkAnswer()" style="display: none;">Submit Answer</button>
+    <p id="feedback"></p>
+    <p id="punchline"></p>
+
+    <div id="confetti-container"></div>
+
+    <script>
+        const jokes = [
+            { joke: "Why don't skeletons fight each other?", punchline: "They don't have the guts." },
+            { joke: "What do you call fake spaghetti?", punchline: "An impasta!" },
+            { joke: "Why did the scarecrow win an award?", punchline: "Because he was outstanding in his field!" },
+            { joke: "What do you call cheese that isn't yours?", punchline: "Nacho cheese." },
+            { joke: "Why couldn't the bicycle stand up by itself?", punchline: "It was two tired." },
+            { joke: "What do you call a factory that makes good products?", punchline: "A satisfactory." },
+            { joke: "Why did the math book look sad?", punchline: "Because it had too many problems." },
+            { joke: "What do you call a bear with no teeth?", punchline: "A gummy bear!" },
+            { joke: "Why did the golfer bring two pairs of pants?", punchline: "In case he got a hole in one!" },
+            { joke: "What do you call a snowman with a six-pack?", punchline: "An abdominal snowman!" },
+            { joke: "Why did the computer go to the doctor?", punchline: "Because it had a virus!" },
+            { joke: "What do you call a fish wearing a bowtie?", punchline: "Sofishticated." },
+            { joke: "Why did the cookie go to the hospital?", punchline: "Because it felt crummy." },
+            { joke: "What do you call a pile of cats?", punchline: "A meowtain." },
+            { joke: "Why did the stadium get hot after the game?", punchline: "All of the fans left." },
+            { joke: "What do you call a lazy kangaroo?", punchline: "A pouch potato." },
+            { joke: "Why did the picture go to jail?", punchline: "Because it was framed!" },
+            { joke: "What do you call a dog that can do magic?", punchline: "A labracadabrador!" },
+            { joke: "Why did the coffee file a police report?", punchline: "It got mugged!" },
+            { joke: "What do you call a cow with no legs?", punchline: "Ground beef." },
+            { joke: "Why did the bicycle fall over?", punchline: "Because it was two-tired!" },
+            { joke: "What do you call a snowman with a sunburn?", punchline: "A puddle." },
+            { joke: "Why did the golfer bring two pairs of pants?", punchline: "In case he got a hole in one!" },
+            { joke: "What do you call a bear with no teeth?", punchline: "A gummy bear!" },
+            { joke: "Why did the math book look sad?", punchline: "Because it had too many problems." },
+            { joke: "What do you call a factory that makes good products?", punchline: "A satisfactory." },
+        ];
+
+        let currentJoke = {};
+        let score = 0;
+
+        function generateJoke() {
+            const randomIndex = Math.floor(Math.random() * jokes.length);
+            currentJoke = jokes[randomIndex];
+
+            document.getElementById('joke').innerText = currentJoke.joke;
+            document.getElementById('inputAnswer').style.display = "block";
+            document.getElementById('submitButton').style.display = "block";
+            document.getElementById('feedback').innerText = "";
+            document.getElementById('punchline').style.display = "none";
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('inputAnswer').value.trim().toLowerCase();
+            const correctAnswer = currentJoke.punchline.trim().toLowerCase();
+
+            const cleanedUserAnswer = userAnswer.replace(/[^a-z0-9]/g, '');
+            const cleanedCorrectAnswer = correctAnswer.replace(/[^a-z0-9]/g, '');
+
+            if (cleanedUserAnswer === cleanedCorrectAnswer) {
+                score++;
+                document.getElementById('feedback').innerHTML = `<span style="color:green;">✅ Correct! You would make a great dad!</span>`;
+                triggerConfetti();
+            } else {
+                document.getElementById('feedback').innerHTML = `<span style="color:red;">❌ Incorrect! Better luck next time sport!</span>`;
+            }
+
+            document.getElementById('score').innerText = `Score: ${score}`;
+            document.getElementById('punchline').innerText = `Punchline: "${currentJoke.punchline}"`;
+            document.getElementById('punchline').style.display = "block";
+            document.getElementById('inputAnswer').value = "";
+            document.getElementById('inputAnswer').style.display = "none";
+            document.getElementById('submitButton').style.display = "none";
+        }
+
+        function triggerConfetti() {
+            const confettiContainer = document.getElementById('confetti-container');
+            confettiContainer.innerHTML = ""; 
+
+            for (let i = 0; i < 500; i++) {
+                const confetti = document.createElement("div");
+                confetti.classList.add("confetti");
+
+                const startX = window.innerWidth / 2; 
+                const startY = window.innerHeight / 3;
+                const randomAngle = Math.random() * 2 * Math.PI;
+                const randomDistanceX = (Math.random() - 0.5) * 600;
+                const randomDistanceY = (Math.random() - 0.5) * 600;
+
+                confetti.style.setProperty("--burstX", `${randomDistanceX}px`);
+                confetti.style.setProperty("--burstY", `${randomDistanceY}px`);
+                confetti.style.left = `${startX}px`;
+                confetti.style.top = `${startY}px`;
+                confetti.style.backgroundColor = randomColor();
+
+                confettiContainer.appendChild(confetti);
+            }
+
+            setTimeout(() => {
+                confettiContainer.innerHTML = ""; 
+            }, 3000);
+        }
+
+        function randomColor() {
+            const colors = ["red", "blue", "yellow", "green", "purple", "orange"];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        document.getElementById("inputAnswer").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkAnswer();
+            }
+        });
+    </script>
+
+    <img id="dad-mascot" src="https://png.pngtree.com/png-vector/20230804/ourmid/pngtree-dad-word-vector-png-image_6897960.png" alt="Dad Mascot" style="width: 200px; height: auto; position: fixed; bottom: 150px; z-index: 1000;">
+
+    <footer>
+        <a href="index.html">My Résumé</a>
+        <a href="scratch.html">My Interests</a>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,106 @@
+footer{
+    background-color: #00000055;
+    color: black;
+    padding: 20px;
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    right: 0;
+}
+#footer-links{
+    color: black;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+footer a{
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+footer a:hover{
+    color: #8a0000d7;
+    text-decoration: underline;
+}
+header{
+    background-image: url('https://images8.alphacoders.com/104/thumb-1920-1049092.jpg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    text-align: center;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 175px;
+    position: relative;
+    color: black;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+body{
+    background-color: #00000017;
+    font-family: 'Lora', serif;
+    color: #212529;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 100px;
+}
+
+#tableau-container {
+    display: flex;
+    justify-content: center; /* Centers the Tableau */
+    align-items: center;
+    margin-top: 25px; /* Adds space below the title */
+    margin-left: auto; /* Centers the Tableau horizontally */
+    width: 80%; /* Adjusts the width */
+    max-width: 900px; /* Limits the maximum size */
+}
+    
+iframe {
+    width: 100%; /* Makes the width adjust with the tab */
+    height: auto; /* Allows the height to resize dynamically */
+    aspect-ratio: 16 / 9; /* Maintains a proper proportional size */
+    display: block;
+    margin: 0 auto;
+}
+
+#youtube-videos {
+    width: 100%; /* Makes it responsive */
+    max-width: 700px; /* Sets a max size */
+    height: auto;
+    aspect-ratio: 16 / 9;
+    display: block;
+    margin: 0 auto; /* Centers the video */
+}
+
+#motorcycle-list{
+    justify-content: center; /* Centers the list items */
+    gap: 20px; /* Adds space between items */
+    margin-top: 20px; /* Adds space above the list */
+    margin-bottom: 20px; /* Adds space below the list */
+    margin-left: 50px;
+}
+
+#back-to-top{
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    color: black;
+    text-decoration: none;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#back-to-top a{
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+#back-to-top a:hover{
+    color: #8a0000d7;
+    text-decoration: underline;
+}
